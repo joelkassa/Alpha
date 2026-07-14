@@ -1,0 +1,65 @@
+const path = require('path');
+require('dotenv').config();
+
+const express = require('express');
+const helmet = require('helmet');
+const cors = require('cors');
+const morgan = require('morgan');
+const compression = require('compression');
+const rateLimit = require('express-rate-limit');
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+// --- Security & performance middleware ---
+app.use(helmet());
+app.use(compression());
+app.use(cors());
+app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
+
+// Basic rate limiting (protects against brute force / abuse)
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 300, // limit each IP to 300 requests per window
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+app.use(limiter);
+
+// --- Body parsing ---
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// --- View engine setup ---
+// We use EJS as the rendering engine, but keep .html as the file extension
+app.set('views', path.join(__dirname, '../frontend/html'));
+app.set('view engine', 'html');
+app.engine('html', require('ejs').renderFile);
+
+// --- Static assets ---
+app.use('/css', express.static(path.join(__dirname, '../frontend/css')));
+app.use('/js', express.static(path.join(__dirname, '../frontend/js')));
+app.use('/images', express.static(path.join(__dirname, '../frontend/images')));
+app.use('/fonts', express.static(path.join(__dirname, '../frontend/fonts')));
+
+// --- Routes ---
+app.get('/', (req, res) => {
+  res.render('index', {
+    title: 'Alpha Special Secondary School For the Deaf',
+  });
+});
+
+// --- 404 handler ---
+app.use((req, res) => {
+  res.status(404).send('Page not found');
+});
+
+// --- Error handler ---
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something went wrong');
+});
+
+app.listen(PORT, () => {
+  console.log(`Server running at http://localhost:${PORT}`);
+});
