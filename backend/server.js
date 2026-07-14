@@ -8,6 +8,10 @@ const morgan = require('morgan');
 const compression = require('compression');
 const rateLimit = require('express-rate-limit');
 
+const cookieParser = require('cookie-parser');
+const language = require('./middleware/language');
+const publicRoutes = require('./routes/publicRoutes');
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -30,6 +34,9 @@ app.use(limiter);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use(cookieParser());
+app.use(language);
+
 // --- View engine setup ---
 // We use EJS as the rendering engine, but keep .html as the file extension
 app.set('views', path.join(__dirname, '../frontend/html'));
@@ -42,12 +49,7 @@ app.use('/js', express.static(path.join(__dirname, '../frontend/js')));
 app.use('/images', express.static(path.join(__dirname, '../frontend/images')));
 app.use('/fonts', express.static(path.join(__dirname, '../frontend/fonts')));
 
-// --- Routes ---
-app.get('/', (req, res) => {
-  res.render('index', {
-    title: 'Alpha Special Secondary School For the Deaf',
-  });
-});
+app.use('/', publicRoutes);
 
 // --- 404 handler ---
 app.use((req, res) => {

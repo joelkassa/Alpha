@@ -1,0 +1,19 @@
+<header class="site-header" id="site-header">
+  <div class="header-inner">
+    <a href="/" class="logo">Alpha School</a>
+
+    <nav class="main-nav">
+      <a href="/" class="<%= activePage === 'home' ? 'active' : '' %>"><%= lang === 'am' ? 'መነሻ' : 'Home' %></a>
+      <a href="/about" class="<%= activePage === 'about' ? 'active' : '' %>"><%= lang === 'am' ? 'ስለ እኛ' : 'About Us' %></a>
+      <a href="/programs" class="<%= activePage === 'programs' ? 'active' : '' %>"><%= lang === 'am' ? 'ፕሮግራሞች' : 'Programs' %></a>
+      <a href="/contact" class="<%= activePage === 'contact' ? 'active' : '' %>"><%= lang === 'am' ? 'አግኙን' : 'Contact' %></a>
+      <a href="/donate" class="nav-donate <%= activePage === 'donate' ? 'active' : '' %>"><%= lang === 'am' ? 'ለግሱ' : 'Donate' %></a>
+    </nav>
+
+    <div class="lang-switch">
+      <a href="?lang=en" class="<%= lang === 'en' ? 'active' : '' %>">EN</a>
+      <span>/</span>
+      <a href="?lang=am" class="<%= lang === 'am' ? 'active' : '' %>">አማ</a>
+    </div>
+  </div>
+</header>
