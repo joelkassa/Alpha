@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="<%= lang %>">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/variables.css">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body data-donation-id="<%= donationId %>">
+  <div class="processing-screen">
+    <div class="spinner"></div>
+    <p><%= lang === 'am' ? 'ክፍያዎ በመስራት ላይ ነው...' : 'Processing your donation...' %></p>
+  </div>
+
+  <script src="/js/donate-processing.js"></script>
+</body>
+</html>

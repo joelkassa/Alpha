@@ -12,6 +12,8 @@ const cookieParser = require('cookie-parser');
 const language = require('./middleware/language');
 const publicRoutes = require('./routes/publicRoutes');
 
+const donateRoutes = require('./routes/donateRoutes');
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -50,6 +52,7 @@ app.use('/images', express.static(path.join(__dirname, '../frontend/images')));
 app.use('/fonts', express.static(path.join(__dirname, '../frontend/fonts')));
 
 app.use('/', publicRoutes);
+app.use('/donate', donateRoutes);
 
 // --- 404 handler ---
 app.use((req, res) => {

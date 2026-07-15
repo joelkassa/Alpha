@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="<%= lang %>">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=Noto+Sans+Ethiopic:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/variables.css">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="<%= lang === 'am' ? 'lang-am' : '' %>">
+
+  <%- include('partials/header') %>
+
+  <main>
+    <section class="page-hero">
+      <div class="page-hero-inner">
+        <% if (donation.status === 'completed') { %>
+          <h1><%= content.donate_thankyou_title %></h1>
+          <p class="page-hero-sub"><%= content.donate_thankyou_message %></p>
+          <p class="donation-amount-display"><%= donation.amount %> ETB</p>
+        <% } else { %>
+          <h1><%= lang === 'am' ? 'ክፍያ አልተሳካም' : 'Payment Failed' %></h1>
+          <p class="page-hero-sub"><%= lang === 'am' ? 'እባክዎ እንደገና ይሞክሩ' : 'Please try again or use a different payment method.' %></p>
+          <a href="/donate" class="btn btn-primary"><%= lang === 'am' ? 'እንደገና ሞክር' : 'Try Again' %></a>
+        <% } %>
+      </div>
+    </section>
+  </main>
+
+  <%- include('partials/footer') %>
+
+  <script src="/js/main.js"></script>
+</body>
+</html>

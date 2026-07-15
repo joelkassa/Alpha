@@ -1,4 +1,5 @@
 const db = require('../config/db');
+const transporter = require('../config/mailer');
 
 exports.getHome = async (req, res, next) => {
   try {
@@ -120,5 +121,52 @@ exports.getPrograms = async (req, res, next) => {
     });
   } catch (err) {
     next(err);
+  }
+};
+
+exports.getContact = (req, res) => {
+  const lang = req.lang;
+  res.render('contact', {
+    title: lang === 'am' ? 'አግኙን — አልፋ ትምህርት ቤት' : 'Contact Us — Alpha School',
+    activePage: 'contact',
+    success: req.query.success === '1',
+    error: null,
+    formData: {},
+  });
+};
+
+exports.postContact = async (req, res) => {
+  const lang = req.lang;
+  const { name, email, message } = req.body;
+
+  if (!name || !email || !message) {
+    return res.render('contact', {
+      title: lang === 'am' ? 'አግኙን — አልፋ ትምህርት ቤት' : 'Contact Us — Alpha School',
+      activePage: 'contact',
+      success: false,
+      error: lang === 'am' ? 'እባክዎ ሁሉንም መስኮች ይሙሉ' : 'Please fill in all fields.',
+      formData: { name, email, message },
+    });
+  }
+
+  try {
+    await transporter.sendMail({
+      from: process.env.SMTP_USER,
+      to: process.env.CONTACT_RECEIVER_EMAIL,
+      replyTo: email,
+      subject: `New contact form message from ${name}`,
+      text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
+    });
+
+    return res.redirect('/contact?success=1');
+  } catch (err) {
+    console.error('Contact form email error:', err.message);
+    return res.render('contact', {
+      title: lang === 'am' ? 'አግኙን — አልፋ ትምህርት ቤት' : 'Contact Us — Alpha School',
+      activePage: 'contact',
+      success: false,
+      error: lang === 'am' ? 'መልዕክቱ አልተላከም። እባክዎ ቆይተው ይሞክሩ።' : 'Message could not be sent. Please try again later.',
+      formData: { name, email, message },
+    });
   }
 };

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="<%= lang %>">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=Noto+Sans+Ethiopic:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/variables.css">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="<%= lang === 'am' ? 'lang-am' : '' %>">
+
+  <%- include('partials/header') %>
+
+  <main>
+    <section class="page-hero">
+      <div class="page-hero-inner">
+        <h1><%= content.donate_hero_title %></h1>
+        <p class="page-hero-sub"><%= content.donate_hero_subtitle %></p>
+      </div>
+    </section>
+
+    <section class="about-section">
+      <div class="section-inner donate-layout">
+
+        <% if (error) { %>
+          <p class="form-error"><%= error %></p>
+        <% } %>
+
+        <form method="POST" action="/donate/initiate" class="donate-form" id="donateForm">
+
+          <label class="donate-label"><%= lang === 'am' ? 'መጠን ይምረጡ' : 'Choose an amount' %></label>
+          <div class="amount-grid">
+            <% presetAmounts.forEach(function(amt) { %>
+              <button type="button" class="amount-btn" data-amount="<%= amt %>"><%= amt %> ETB</button>
+            <% }); %>
+          </div>
+          <input type="number" name="amount" id="customAmount" min="1" placeholder="<%= lang === 'am' ? 'ወይም መጠን ያስገቡ' : 'Or enter a custom amount' %>" required>
+
+          <label class="donate-label"><%= lang === 'am' ? 'የክፍያ ዘዴ' : 'Payment method' %></label>
+          <div class="method-grid">
+            <label class="method-option">
+              <input type="radio" name="method" value="telebirr" required> Telebirr
+            </label>
+            <label class="method-option">
+              <input type="radio" name="method" value="cbe"> CBE Birr
+            </label>
+          </div>
+
+          <label class="donate-label" for="donor_name"><%= lang === 'am' ? 'ስም (አማራጭ)' : 'Name (optional)' %></label>
+          <input type="text" name="donor_name" id="donor_name" placeholder="<%= lang === 'am' ? 'የስም ማስገባት አማራጭ ነው' : 'Leave blank to donate anonymously' %>">
+
+          <p class="donate-note"><%= content.donate_note %></p>
+
+          <button type="submit" class="btn btn-primary"><%= lang === 'am' ? 'ለግስ' : 'Donate Now' %></button>
+        </form>
+
+      </div>
+    </section>
+  </main>
+
+  <%- include('partials/footer') %>
+
+  <script src="/js/main.js"></script>
+  <script src="/js/donate.js"></script>
+</body>
+</html>
