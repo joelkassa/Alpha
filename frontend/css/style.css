@@ -234,3 +234,82 @@ img { max-width: 100%; display: block; }
   font-size: 0.8rem;
   color: var(--gray-text);
 }
+/* ── Page hero (used by inner pages) ── */
+.page-hero {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-dark) 100%);
+  color: var(--white);
+  padding: 140px 24px 60px;
+  text-align: center;
+}
+.page-hero h1 {
+  font-family: var(--font-serif);
+  font-size: 2.25rem;
+  font-weight: 700;
+}
+
+/* ── About sections ── */
+.about-section.alt-bg { background: var(--gray-light); }
+.about-block { max-width: 800px; }
+.section-title-left {
+  font-family: var(--font-serif);
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 20px;
+}
+.about-block p {
+  color: var(--gray-text);
+  font-size: 1.02rem;
+}
+
+/* ── Staff ── */
+.staff-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 28px;
+}
+.staff-card {
+  text-align: center;
+}
+.staff-photo {
+  width: 100%;
+  height: 200px;
+  border-radius: 8px;
+  margin-bottom: 14px;
+}
+.staff-card h3 {
+  font-family: var(--font-serif);
+  color: var(--navy);
+  font-size: 1.15rem;
+}
+.staff-role {
+  color: var(--gold);
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin: 4px 0 10px;
+}
+.staff-bio {
+  color: var(--gray-text);
+  font-size: 0.9rem;
+}
+
+/* ── Gallery ── */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+.gallery-item {
+  border-radius: 8px;
+  overflow: hidden;
+}
+.gallery-placeholder {
+  height: 180px;
+  border-radius: 8px;
+}
+.gallery-caption {
+  margin-top: 8px;
+  font-size: 0.85rem;
+  color: var(--gray-text);
+  text-align: center;
+}

@@ -1,0 +1,4 @@
+ALTER TABLE staff RENAME COLUMN role TO role_en;
+ALTER TABLE staff ADD COLUMN role_am VARCHAR(255);
+ALTER TABLE staff RENAME COLUMN bio TO bio_en;
+ALTER TABLE staff ADD COLUMN bio_am TEXT;
