@@ -7,16 +7,21 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=Noto+Sans+Ethiopic:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/variables.css">
   <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/admin.css">
 </head>
 <body class="<%= lang === 'am' ? 'lang-am' : '' %>">
 
   <%- include('partials/header') %>
 
+  <% if (isAdmin) { %>
+    <%- include('partials/admin-toolbar') %>
+  <% } %>
+
   <main>
     <section class="page-hero">
       <div class="page-hero-inner">
-        <h1><%= content.donate_hero_title %></h1>
-        <p class="page-hero-sub"><%= content.donate_hero_subtitle %></p>
+        <h1 data-editable-key="donate_hero_title" data-editable-lang="<%= lang %>"><%= content.donate_hero_title %></h1>
+        <p class="page-hero-sub" data-editable-key="donate_hero_subtitle" data-editable-lang="<%= lang %>"><%= content.donate_hero_subtitle %></p>
       </div>
     </section>
 
@@ -50,7 +55,7 @@
           <label class="donate-label" for="donor_name"><%= lang === 'am' ? 'ስም (አማራጭ)' : 'Name (optional)' %></label>
           <input type="text" name="donor_name" id="donor_name" placeholder="<%= lang === 'am' ? 'የስም ማስገባት አማራጭ ነው' : 'Leave blank to donate anonymously' %>">
 
-          <p class="donate-note"><%= content.donate_note %></p>
+          <p class="donate-note" data-editable-key="donate_note" data-editable-lang="<%= lang %>"><%= content.donate_note %></p>
 
           <button type="submit" class="btn btn-primary"><%= lang === 'am' ? 'ለግስ' : 'Donate Now' %></button>
         </form>
@@ -63,5 +68,8 @@
 
   <script src="/js/main.js"></script>
   <script src="/js/donate.js"></script>
+  <% if (isAdmin) { %>
+    <script src="/js/admin-edit.js"></script>
+  <% } %>
 </body>
 </html>

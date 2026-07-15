@@ -7,10 +7,15 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=Noto+Sans+Ethiopic:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/variables.css">
   <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/admin.css">
 </head>
 <body class="<%= lang === 'am' ? 'lang-am' : '' %>">
 
   <%- include('partials/header') %>
+
+  <% if (isAdmin) { %>
+    <%- include('partials/admin-toolbar') %>
+  <% } %>
 
   <main>
     <section class="page-hero">
@@ -21,21 +26,21 @@
 
     <section class="about-section">
       <div class="section-inner about-block">
-        <h2 class="section-title-left"><%= content.about_history_title %></h2>
-        <p><%= content.about_history_body %></p>
+        <h2 class="section-title-left" data-editable-key="about_history_title" data-editable-lang="<%= lang %>"><%= content.about_history_title %></h2>
+        <p data-editable-key="about_history_body" data-editable-lang="<%= lang %>"><%= content.about_history_body %></p>
       </div>
     </section>
 
     <section class="about-section alt-bg">
       <div class="section-inner about-block">
-        <h2 class="section-title-left"><%= content.about_mission_title %></h2>
-        <p><%= content.about_mission_body %></p>
+        <h2 class="section-title-left" data-editable-key="about_mission_title" data-editable-lang="<%= lang %>"><%= content.about_mission_title %></h2>
+        <p data-editable-key="about_mission_body" data-editable-lang="<%= lang %>"><%= content.about_mission_body %></p>
       </div>
     </section>
 
     <section class="about-section">
       <div class="section-inner">
-        <h2 class="section-title"><%= content.about_staff_title %></h2>
+        <h2 class="section-title" data-editable-key="about_staff_title" data-editable-lang="<%= lang %>"><%= content.about_staff_title %></h2>
         <div class="staff-grid">
           <% staff.forEach(function(member) { %>
             <div class="staff-card">
@@ -57,5 +62,8 @@
   <%- include('partials/footer') %>
 
   <script src="/js/main.js"></script>
+  <% if (isAdmin) { %>
+    <script src="/js/admin-edit.js"></script>
+  <% } %>
 </body>
 </html>
