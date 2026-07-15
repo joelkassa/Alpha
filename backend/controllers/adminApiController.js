@@ -5,8 +5,7 @@ const { logChange } = require('../utils/activityLog');
 exports.patchContentBlock = async (req, res) => {
   try {
     const { key } = req.params;
-    const { value } = req.body; // the new text
-    const { lang } = req.body;  // 'en' or 'am' — which column changed
+    const { value, lang } = req.body;
 
     if (!['en', 'am'].includes(lang)) {
       return res.status(400).json({ error: 'Invalid lang' });
@@ -41,7 +40,7 @@ exports.patchContentBlock = async (req, res) => {
   }
 };
 
-// Undo the most recent change
+// Undo the most recent change, regardless of which table it touched
 exports.postUndo = async (req, res) => {
   try {
     const lastChange = await db.query(
@@ -53,19 +52,28 @@ exports.postUndo = async (req, res) => {
     }
 
     const entry = lastChange.rows[0];
-    const prev = entry.previous_data;
+    const { table_name, action, previous_data, new_data } = entry;
 
-    if (entry.table_name === 'content_blocks') {
-      await db.query(
-        `UPDATE content_blocks SET block_value_en = $1, block_value_am = $2, updated_at = NOW() WHERE id = $3`,
-        [prev.block_value_en, prev.block_value_am, prev.id]
-      );
+    if (action === 'update') {
+      const row = previous_data;
+      const columns = Object.keys(row).filter((c) => c !== 'id');
+      const setClauses = columns.map((c, i) => `${c} = $${i + 1}`).join(', ');
+      const values = columns.map((c) => row[c]);
+      values.push(row.id);
+      await db.query(`UPDATE ${table_name} SET ${setClauses} WHERE id = $${columns.length + 1}`, values);
+    } else if (action === 'create') {
+      await db.query(`DELETE FROM ${table_name} WHERE id = $1`, [new_data.id]);
+    } else if (action === 'delete') {
+      const row = previous_data;
+      const columns = Object.keys(row);
+      const values = Object.values(row);
+      const placeholders = columns.map((_, i) => `$${i + 1}`).join(', ');
+      await db.query(`INSERT INTO ${table_name} (${columns.join(', ')}) VALUES (${placeholders})`, values);
     }
-    // Additional table_name branches (programs, staff, etc.) get added in the next phase.
 
     await db.query(`UPDATE activity_log SET reverted = TRUE WHERE id = $1`, [entry.id]);
 
-    res.json({ success: true, undone: entry.table_name });
+    res.json({ success: true, undone: table_name });
   } catch (err) {
     console.error('postUndo error:', err.message);
     res.status(500).json({ error: 'Failed to undo' });
@@ -92,10 +100,7 @@ exports.postReset = async (req, res) => {
         const columns = Object.keys(row);
         const values = Object.values(row);
         const placeholders = columns.map((_, i) => `$${i + 1}`).join(', ');
-        await db.query(
-          `INSERT INTO ${table} (${columns.join(', ')}) VALUES (${placeholders})`,
-          values
-        );
+        await db.query(`INSERT INTO ${table} (${columns.join(', ')}) VALUES (${placeholders})`, values);
       }
     }
 

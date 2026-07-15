@@ -21,6 +21,9 @@ const adminLocals = require('./middleware/adminLocals');
 
 const adminApiRoutes = require('./routes/adminApiRoutes');
 
+const adminListRoutes = require('./routes/adminListRoutes');
+const uploadRoutes = require('./routes/uploadRoutes');
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -49,6 +52,8 @@ app.use(sessionMiddleware);
 
 app.use(adminLocals);
 
+
+
 // --- View engine setup ---
 // We use EJS as the rendering engine, but keep .html as the file extension
 app.set('views', path.join(__dirname, '../frontend/html'));
@@ -65,6 +70,9 @@ app.use('/', publicRoutes);
 app.use('/donate', donateRoutes);
 app.use('/admin', adminRoutes);
 app.use('/admin/api', adminApiRoutes);
+
+app.use('/admin/api/lists', adminListRoutes);
+app.use('/admin/api/upload', uploadRoutes);
 
 // --- 404 handler ---
 app.use((req, res) => {
