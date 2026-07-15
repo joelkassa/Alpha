@@ -1,0 +1,78 @@
+* { box-sizing: border-box; }
+body { font-family: var(--font-sans); color: var(--body-text); margin: 0; }
+
+/* ── Login ── */
+.admin-login-body {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--navy-dark);
+}
+.admin-login-box {
+  background: var(--white);
+  padding: 40px;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 360px;
+}
+.admin-login-box h1 {
+  font-family: var(--font-serif);
+  color: var(--navy);
+  margin-bottom: 24px;
+  text-align: center;
+}
+.admin-login-box form {
+  display: flex;
+  flex-direction: column;
+}
+.admin-login-box label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--navy);
+  margin-top: 14px;
+}
+.admin-login-box input {
+  padding: 10px 12px;
+  border: 1px solid var(--gray-mid);
+  border-radius: 4px;
+  margin-top: 6px;
+}
+.admin-login-box button {
+  margin-top: 24px;
+  border: none;
+  cursor: pointer;
+  padding: 12px;
+}
+
+/* ── Topbar ── */
+.admin-topbar {
+  background: var(--navy-dark);
+  color: var(--white);
+  padding: 14px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+}
+.admin-logout-btn {
+  background: var(--gold);
+  color: var(--white);
+  border: none;
+  padding: 6px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+/* ── Wrap ── */
+.admin-wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 24px;
+}
+.admin-wrap h1 {
+  font-family: var(--font-serif);
+  color: var(--navy);
+  margin-bottom: 16px;
+}

@@ -14,6 +14,9 @@ const publicRoutes = require('./routes/publicRoutes');
 
 const donateRoutes = require('./routes/donateRoutes');
 
+const sessionMiddleware = require('./config/session');
+const adminRoutes = require('./routes/adminRoutes');
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -38,6 +41,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(cookieParser());
 app.use(language);
+app.use(sessionMiddleware);
 
 // --- View engine setup ---
 // We use EJS as the rendering engine, but keep .html as the file extension
@@ -53,6 +57,7 @@ app.use('/fonts', express.static(path.join(__dirname, '../frontend/fonts')));
 
 app.use('/', publicRoutes);
 app.use('/donate', donateRoutes);
+app.use('/admin', adminRoutes);
 
 // --- 404 handler ---
 app.use((req, res) => {

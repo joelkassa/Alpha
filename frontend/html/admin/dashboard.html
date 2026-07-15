@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="/css/variables.css">
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+  <div class="admin-topbar">
+    <span>Logged in as <%= adminEmail %></span>
+    <form method="POST" action="/admin/logout">
+      <button type="submit" class="admin-logout-btn">Log Out</button>
+    </form>
+  </div>
+
+  <div class="admin-wrap">
+    <h1>Admin Dashboard</h1>
+    <p>Welcome. This is a placeholder — content management sections (Home, About, Programs, Gallery, Staff, Donor Logos, Donations) will be added next.</p>
+  </div>
+</body>
+</html>
