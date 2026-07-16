@@ -22,7 +22,6 @@
     setEditMode(!editMode);
   });
 
-  // Content-block fields (single text values keyed by block_key + lang)
   document.querySelectorAll('[data-editable-key]').forEach(function (el) {
     el.addEventListener('blur', function () {
       if (!editMode) return;
@@ -47,13 +46,19 @@
         if (change.type === 'content') {
           await fetch('/admin/api/content-blocks/' + encodeURIComponent(change.key), {
             method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRF-Token': window.getCsrfToken(),
+            },
             body: JSON.stringify({ value: change.value, lang: change.lang }),
           });
         } else if (change.type === 'list') {
           await fetch('/admin/api/lists/' + change.table + '/' + change.recordId, {
             method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRF-Token': window.getCsrfToken(),
+            },
             body: JSON.stringify({ [change.field]: change.value }),
           });
         }
@@ -70,7 +75,10 @@
   undoBtn.addEventListener('click', async function () {
     statusEl.textContent = 'Undoing...';
     try {
-      const res = await fetch('/admin/api/undo', { method: 'POST' });
+      const res = await fetch('/admin/api/undo', {
+        method: 'POST',
+        headers: { 'X-CSRF-Token': window.getCsrfToken() },
+      });
       const data = await res.json();
       if (data.success) {
         statusEl.textContent = 'Undone — reload to see change';
@@ -83,7 +91,7 @@
     }
   });
 
-  // ── Reset to Default (custom modal, not native prompt()) ──
+  // ── Reset to Default (custom modal) ──
   const resetModalOverlay = document.getElementById('resetModalOverlay');
   const resetConfirmInput = document.getElementById('resetConfirmInput');
   const resetCancelBtn = document.getElementById('resetCancelBtn');
@@ -116,7 +124,10 @@
     try {
       const res = await fetch('/admin/api/reset', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': window.getCsrfToken(),
+        },
         body: JSON.stringify({ confirmText }),
       });
       const data = await res.json();

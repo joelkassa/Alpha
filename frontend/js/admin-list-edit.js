@@ -26,7 +26,10 @@
         if (!confirm('Delete this item? This happens immediately and is not part of Save Changes.')) return;
 
         try {
-          const res = await fetch('/admin/api/lists/' + table + '/' + id, { method: 'DELETE' });
+          const res = await fetch('/admin/api/lists/' + table + '/' + id, {
+            method: 'DELETE',
+            headers: { 'X-CSRF-Token': window.getCsrfToken() },
+          });
           const data = await res.json();
           if (data.success) window.location.reload();
         } catch (err) {
@@ -45,7 +48,10 @@
         try {
           const res = await fetch('/admin/api/lists/' + table, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRF-Token': window.getCsrfToken(),
+            },
             body: JSON.stringify(defaults),
           });
           const data = await res.json();
@@ -73,13 +79,20 @@
         if (statusEl) statusEl.textContent = 'Uploading...';
 
         try {
-          const uploadRes = await fetch('/admin/api/upload', { method: 'POST', body: formData });
+          const uploadRes = await fetch('/admin/api/upload', {
+            method: 'POST',
+            headers: { 'X-CSRF-Token': window.getCsrfToken() },
+            body: formData,
+          });
           const uploadData = await uploadRes.json();
           if (!uploadData.success) throw new Error('Upload failed');
 
           const patchRes = await fetch('/admin/api/lists/' + table + '/' + id, {
             method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRF-Token': window.getCsrfToken(),
+            },
             body: JSON.stringify({ [field]: uploadData.url }),
           });
           const patchData = await patchRes.json();

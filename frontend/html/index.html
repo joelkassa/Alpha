@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%= title %></title>
+  <meta name="csrf-token" content="<%= csrfToken %>">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=Noto+Sans+Ethiopic:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/variables.css">
   <link rel="stylesheet" href="/css/style.css">
@@ -104,6 +105,7 @@
   <script src="/js/preloader.js"></script>
   <% if (isAdmin) { %>
      <script src="/js/admin-state.js"></script>
+     <script src="/js/csrf-helper.js"></script>
     <script src="/js/admin-edit.js"></script>
     <script src="/js/admin-list-edit.js"></script>
   <% } %>
