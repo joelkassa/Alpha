@@ -5,14 +5,17 @@ exports.getLogin = (req, res) => {
   if (req.session && req.session.adminId) {
     return res.redirect('/admin/dashboard');
   }
-  res.render('admin/login', { error: null });
+  res.render('admin/login', { error: null, email: '' });
 };
 
 exports.postLogin = async (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    return res.render('admin/login', { error: 'Please enter email and password.' });
+    return res.render('admin/login', {
+      error: 'Please enter both email and password.',
+      email: email || '',
+    });
   }
 
   try {
@@ -20,12 +23,18 @@ exports.postLogin = async (req, res) => {
     const admin = result.rows[0];
 
     if (!admin) {
-      return res.render('admin/login', { error: 'Invalid email or password.' });
+      return res.render('admin/login', {
+        error: 'Incorrect email or password. Please try again.',
+        email,
+      });
     }
 
     const match = await bcrypt.compare(password, admin.password_hash);
     if (!match) {
-      return res.render('admin/login', { error: 'Invalid email or password.' });
+      return res.render('admin/login', {
+        error: 'Incorrect email or password. Please try again.',
+        email,
+      });
     }
 
     req.session.adminId = admin.id;
@@ -33,7 +42,10 @@ exports.postLogin = async (req, res) => {
     res.redirect('/admin/dashboard');
   } catch (err) {
     console.error('Login error:', err.message);
-    res.render('admin/login', { error: 'Something went wrong. Please try again.' });
+    res.render('admin/login', {
+      error: 'Something went wrong. Please try again.',
+      email,
+    });
   }
 };
 

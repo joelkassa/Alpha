@@ -12,8 +12,9 @@
 <body class="<%= lang === 'am' ? 'lang-am' : '' %>">
 
   <%- include('partials/header') %>
+
   <% if (isAdmin) { %>
-  <%- include('partials/admin-toolbar') %>
+    <%- include('partials/admin-toolbar') %>
   <% } %>
 
   <main>
@@ -27,17 +28,23 @@
       <div class="section-inner">
         <div class="programs-grid">
           <% programs.forEach(function(program) { %>
-            <div class="program-card">
+            <div class="program-card" data-list-table="programs" data-list-id="<%= program.id %>">
               <% if (program.image_url) { %>
                 <img src="<%= program.image_url %>" alt="<%= program.title %>">
               <% } else { %>
                 <div class="img-placeholder">Image</div>
               <% } %>
-              <h3><%= program.title %></h3>
-              <p><%= program.description %></p>
+              <label class="admin-image-upload-label">
+                Change Image
+                <input type="file" accept="image/*" data-list-image-input="image_url" hidden>
+              </label>
+              <h3 data-list-field="title_<%= lang %>"><%= program.title %></h3>
+              <p data-list-field="description_<%= lang %>"><%= program.description %></p>
+              <button type="button" class="list-delete-btn" data-list-delete>Remove</button>
             </div>
           <% }); %>
         </div>
+        <button type="button" class="list-add-btn" data-list-add="programs" data-list-defaults='{"title_en":"New Program","title_am":"","description_en":"Description goes here.","description_am":"","sort_order":99}'>+ Add Program</button>
       </div>
     </section>
 
@@ -46,16 +53,22 @@
         <h2 class="section-title"><%= lang === 'am' ? 'ጋለሪ' : 'Gallery' %></h2>
         <div class="gallery-grid">
           <% gallery.forEach(function(item) { %>
-            <div class="gallery-item">
+            <div class="gallery-item" data-list-table="gallery_images" data-list-id="<%= item.id %>">
               <% if (item.image_url) { %>
                 <img src="<%= item.image_url %>" alt="<%= item.caption %>">
               <% } else { %>
                 <div class="img-placeholder gallery-placeholder">Image</div>
               <% } %>
-              <p class="gallery-caption"><%= item.caption %></p>
+              <label class="admin-image-upload-label">
+                Change Image
+                <input type="file" accept="image/*" data-list-image-input="image_url" hidden>
+              </label>
+              <p class="gallery-caption" data-list-field="caption_<%= lang %>"><%= item.caption %></p>
+              <button type="button" class="list-delete-btn" data-list-delete>Remove</button>
             </div>
           <% }); %>
         </div>
+        <button type="button" class="list-add-btn" data-list-add="gallery_images" data-list-defaults='{"caption_en":"New photo","caption_am":"","sort_order":99}'>+ Add Gallery Image</button>
       </div>
     </section>
   </main>
@@ -64,7 +77,9 @@
 
   <script src="/js/main.js"></script>
   <% if (isAdmin) { %>
-  <script src="/js/admin-edit.js"></script>
-<% } %>
+     <script src="/js/admin-state.js"></script>
+    <script src="/js/admin-edit.js"></script>
+    <script src="/js/admin-list-edit.js"></script>
+  <% } %>
 </body>
 </html>

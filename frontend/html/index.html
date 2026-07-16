@@ -35,11 +35,15 @@
     <section class="stats">
       <div class="section-inner stats-grid">
         <% stats.forEach(function(stat) { %>
-          <div class="stat-item">
-            <span class="stat-value"><%= stat.value %></span>
-            <span class="stat-label"><%= stat.label %></span>
+          <div class="stat-item" data-list-table="stats" data-list-id="<%= stat.id %>">
+            <span class="stat-value" data-list-field="value"><%= stat.value %></span>
+            <span class="stat-label" data-list-field="label_<%= lang %>"><%= stat.label %></span>
+            <button type="button" class="list-delete-btn" data-list-delete>Remove</button>
           </div>
         <% }); %>
+      </div>
+      <div class="section-inner">
+        <button type="button" class="list-add-btn" data-list-add="stats" data-list-defaults='{"label_en":"New Stat","label_am":"","value":"0","sort_order":99}'>+ Add Stat</button>
       </div>
     </section>
 
@@ -48,17 +52,22 @@
         <h2 class="section-title"><%= lang === 'am' ? 'ፕሮግራሞች' : 'Our Programs' %></h2>
         <div class="programs-grid">
           <% programs.forEach(function(program) { %>
-            <div class="program-card">
+            <div class="program-card" data-list-table="programs" data-list-id="<%= program.id %>">
               <% if (program.image_url) { %>
                 <img src="<%= program.image_url %>" alt="<%= program.title %>">
               <% } else { %>
                 <div class="img-placeholder">Image</div>
               <% } %>
-              <h3><%= program.title %></h3>
-              <p><%= program.description %></p>
+              <label class="admin-image-upload-label">
+                Change Image
+                <input type="file" accept="image/*" data-list-image-input="image_url" hidden>
+              </label>
+              <h3 data-list-field="title_<%= lang %>"><%= program.title %></h3>
+              <p data-list-field="description_<%= lang %>"><%= program.description %></p>
             </div>
           <% }); %>
         </div>
+        <p class="admin-hint-text" style="font-size:0.8rem;color:var(--gray-text);margin-top:12px;">To add or remove programs, use the Programs page.</p>
       </div>
     </section>
 
@@ -67,15 +76,21 @@
         <h2 class="section-title"><%= lang === 'am' ? 'ደጋፊዎቻችን' : 'Our Supporters' %></h2>
         <div class="donors-strip">
           <% donors.forEach(function(donor) { %>
-            <div class="donor-logo">
+            <div class="donor-logo" data-list-table="donor_logos" data-list-id="<%= donor.id %>">
               <% if (donor.logo_url) { %>
                 <img src="<%= donor.logo_url %>" alt="<%= donor.name %>">
               <% } else { %>
-                <div class="img-placeholder small"><%= donor.name %></div>
+                <div class="img-placeholder small" data-list-field="name"><%= donor.name %></div>
               <% } %>
+              <label class="admin-image-upload-label">
+                Change Logo
+                <input type="file" accept="image/*" data-list-image-input="logo_url" hidden>
+              </label>
+              <button type="button" class="list-delete-btn" data-list-delete>Remove</button>
             </div>
           <% }); %>
         </div>
+        <button type="button" class="list-add-btn" data-list-add="donor_logos" data-list-defaults='{"name":"New Donor","link_url":"#","sort_order":99}'>+ Add Donor Logo</button>
       </div>
     </section>
   </main>
@@ -84,7 +99,9 @@
 
   <script src="/js/main.js"></script>
   <% if (isAdmin) { %>
+     <script src="/js/admin-state.js"></script>
     <script src="/js/admin-edit.js"></script>
+    <script src="/js/admin-list-edit.js"></script>
   <% } %>
 </body>
 </html>

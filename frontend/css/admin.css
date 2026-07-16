@@ -148,3 +148,70 @@ body { font-family: var(--font-sans); color: var(--body-text); margin: 0; }
 #admin-toolbar a#dashboardLink:hover {
   background: var(--navy-mid);
 }
+
+[data-list-field].admin-editable-active {
+  outline: 2px dashed var(--gold);
+  outline-offset: 3px;
+  cursor: text;
+}
+
+.list-delete-btn,
+.list-add-btn,
+.admin-image-upload-label {
+  display: none;
+}
+body.admin-edit-mode .list-delete-btn,
+body.admin-edit-mode .list-add-btn,
+body.admin-edit-mode .admin-image-upload-label {
+  display: inline-block;
+}
+
+.list-delete-btn {
+  margin-top: 10px;
+  background: #b02a37;
+  color: var(--white);
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+.list-add-btn {
+  margin-top: 20px;
+  background: var(--navy);
+  color: var(--white);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+.admin-image-upload-label {
+  background: var(--gray-mid);
+  color: var(--navy);
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  margin: 8px 0;
+}
+.form-error {
+  background: #f8d7da;
+  color: #842029;
+  padding: 12px 16px;
+  border-radius: 4px;
+  margin-bottom: 16px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+#admin-toolbar button:disabled {
+  background: var(--gray-mid);
+  color: var(--gray-text);
+  cursor: not-allowed;
+}
+[data-editable-key].pending-edit,
+[data-list-field].pending-edit {
+  outline: 2px dashed #b8860b;
+  background: rgba(200, 151, 42, 0.08);
+}

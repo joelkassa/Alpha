@@ -43,18 +43,24 @@
         <h2 class="section-title" data-editable-key="about_staff_title" data-editable-lang="<%= lang %>"><%= content.about_staff_title %></h2>
         <div class="staff-grid">
           <% staff.forEach(function(member) { %>
-            <div class="staff-card">
+            <div class="staff-card" data-list-table="staff" data-list-id="<%= member.id %>">
               <% if (member.photo_url) { %>
                 <img src="<%= member.photo_url %>" alt="<%= member.name %>">
               <% } else { %>
                 <div class="img-placeholder staff-photo">Photo</div>
               <% } %>
-              <h3><%= member.name %></h3>
-              <p class="staff-role"><%= member.role %></p>
-              <p class="staff-bio"><%= member.bio %></p>
+              <label class="admin-image-upload-label">
+                Change Photo
+                <input type="file" accept="image/*" data-list-image-input="photo_url" hidden>
+              </label>
+              <h3 data-list-field="name"><%= member.name %></h3>
+              <p class="staff-role" data-list-field="role_<%= lang %>"><%= member.role %></p>
+              <p class="staff-bio" data-list-field="bio_<%= lang %>"><%= member.bio %></p>
+              <button type="button" class="list-delete-btn" data-list-delete>Remove</button>
             </div>
           <% }); %>
         </div>
+        <button type="button" class="list-add-btn" data-list-add="staff" data-list-defaults='{"name":"New Staff Member","role_en":"Role","role_am":"","bio_en":"Bio goes here.","bio_am":"","sort_order":99}'>+ Add Staff Member</button>
       </div>
     </section>
   </main>
@@ -63,7 +69,9 @@
 
   <script src="/js/main.js"></script>
   <% if (isAdmin) { %>
+     <script src="/js/admin-state.js"></script>
     <script src="/js/admin-edit.js"></script>
+    <script src="/js/admin-list-edit.js"></script>
   <% } %>
 </body>
 </html>

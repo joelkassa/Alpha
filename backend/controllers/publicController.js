@@ -16,9 +16,10 @@ exports.getHome = async (req, res, next) => {
     });
 
     const statsResult = await db.query(
-      `SELECT label_en, label_am, value FROM stats ORDER BY sort_order ASC`
+      `SELECT id, label_en, label_am, value FROM stats ORDER BY sort_order ASC`
     );
     const stats = statsResult.rows.map((row) => ({
+      id: row.id,
       label: lang === 'am' ? row.label_am : row.label_en,
       value: row.value,
     }));
@@ -35,7 +36,7 @@ exports.getHome = async (req, res, next) => {
     }));
 
     const donorResult = await db.query(
-      `SELECT name, logo_url, link_url FROM donor_logos ORDER BY sort_order ASC`
+      `SELECT id, name, logo_url, link_url FROM donor_logos ORDER BY sort_order ASC`
     );
 
     res.render('index', {

@@ -1,6 +1,6 @@
 (function () {
-  const toolbar = document.getElementById('admin-toolbar');
   const toggleBtn = document.getElementById('toggleEditMode');
+  const saveChangesBtn = document.getElementById('saveChangesBtn');
   const undoBtn = document.getElementById('undoBtn');
   const resetBtn = document.getElementById('resetBtn');
   const statusEl = document.getElementById('adminSaveStatus');
@@ -9,8 +9,10 @@
 
   function setEditMode(on) {
     editMode = on;
+    window.adminEditModeOn = on;
+    document.body.classList.toggle('admin-edit-mode', on);
     toggleBtn.textContent = 'Edit Mode: ' + (on ? 'ON' : 'OFF');
-    document.querySelectorAll('[data-editable-key]').forEach(function (el) {
+    document.querySelectorAll('[data-editable-key], [data-list-field]').forEach(function (el) {
       el.contentEditable = on;
       el.classList.toggle('admin-editable-active', on);
     });
@@ -20,39 +22,50 @@
     setEditMode(!editMode);
   });
 
+  // Content-block fields (single text values keyed by block_key + lang)
   document.querySelectorAll('[data-editable-key]').forEach(function (el) {
     el.addEventListener('blur', function () {
       if (!editMode) return;
-      saveField(el);
+      const key = el.dataset.editableKey;
+      const lang = el.dataset.editableLang;
+      const value = el.innerText.trim();
+      const changeId = 'content:' + key + ':' + lang;
+
+      window.AdminPending.setChange(changeId, { type: 'content', key, lang, value });
+      el.classList.add('pending-edit');
     });
   });
 
-  async function saveField(el) {
-    const key = el.dataset.editableKey;
-    const lang = el.dataset.editableLang;
-    const value = el.innerText.trim();
+  saveChangesBtn.addEventListener('click', async function () {
+    const entries = Object.values(window.AdminPending.changes);
+    if (entries.length === 0) return;
 
-    statusEl.textContent = 'Saving...';
+    statusEl.textContent = 'Saving ' + entries.length + ' change(s)...';
 
     try {
-      const res = await fetch('/admin/api/content-blocks/' + encodeURIComponent(key), {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ value, lang }),
-      });
-      const data = await res.json();
-
-      if (data.success) {
-        statusEl.textContent = 'Saved';
-      } else {
-        statusEl.textContent = 'Error: ' + (data.error || 'unknown');
+      for (const change of entries) {
+        if (change.type === 'content') {
+          await fetch('/admin/api/content-blocks/' + encodeURIComponent(change.key), {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ value: change.value, lang: change.lang }),
+          });
+        } else if (change.type === 'list') {
+          await fetch('/admin/api/lists/' + change.table + '/' + change.recordId, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ [change.field]: change.value }),
+          });
+        }
       }
-    } catch (err) {
-      statusEl.textContent = 'Error saving';
-    }
 
-    setTimeout(function () { statusEl.textContent = ''; }, 2000);
-  }
+      window.AdminPending.clear();
+      statusEl.textContent = 'All changes saved';
+      setTimeout(function () { window.location.reload(); }, 800);
+    } catch (err) {
+      statusEl.textContent = 'Error saving changes';
+    }
+  });
 
   undoBtn.addEventListener('click', async function () {
     statusEl.textContent = 'Undoing...';
@@ -83,6 +96,7 @@
       });
       const data = await res.json();
       if (data.success) {
+        window.AdminPending.clear();
         statusEl.textContent = 'Reset complete';
         setTimeout(function () { window.location.reload(); }, 800);
       } else {
