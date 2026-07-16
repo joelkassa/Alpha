@@ -11,12 +11,78 @@
   <div class="admin-topbar">
     <span>Logged in as <%= adminEmail %></span>
     <form method="POST" action="/admin/logout">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
       <button type="submit" class="admin-logout-btn">Log Out</button>
     </form>
   </div>
 
   <div class="admin-wrap">
     <h1>Admin Dashboard</h1>
+
+    <!-- ── Donation stats ── -->
+    <h2 class="admin-section-heading">Donations Overview</h2>
+    <div class="stat-cards">
+      <div class="stat-card">
+        <span class="stat-card-value">ETB <%= Number(totals.total_raised).toLocaleString() %></span>
+        <span class="stat-card-label">Total Raised (Completed)</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-card-value"><%= totals.completed_count %></span>
+        <span class="stat-card-label">Completed Donations</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-card-value"><%= totals.pending_count %></span>
+        <span class="stat-card-label">Pending</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-card-value"><%= totals.failed_count %></span>
+        <span class="stat-card-label">Failed</span>
+      </div>
+    </div>
+
+    <% if (byMethod.length > 0) { %>
+      <div class="method-breakdown">
+        <% byMethod.forEach(function(m) { %>
+          <div class="method-pill">
+            <strong><%= m.method === 'telebirr' ? 'Telebirr' : 'CBE Birr' %>:</strong>
+            ETB <%= Number(m.total).toLocaleString() %> (<%= m.count %>)
+          </div>
+        <% }); %>
+      </div>
+    <% } %>
+
+    <h2 class="admin-section-heading">Recent Donations</h2>
+    <% if (recentDonations.length === 0) { %>
+      <p class="admin-empty-text">No donations yet.</p>
+    <% } else { %>
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Donor</th>
+            <th>Amount</th>
+            <th>Method</th>
+            <th>Status</th>
+            <th>Reference</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% recentDonations.forEach(function(d) { %>
+            <tr>
+              <td><%= new Date(d.created_at).toLocaleString() %></td>
+              <td><%= d.donor_name || 'Anonymous' %></td>
+              <td>ETB <%= Number(d.amount).toLocaleString() %></td>
+              <td><%= d.method === 'telebirr' ? 'Telebirr' : 'CBE Birr' %></td>
+              <td><span class="status-badge status-<%= d.status %>"><%= d.status %></span></td>
+              <td><%= d.transaction_ref || '—' %></td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    <% } %>
+
+    <!-- ── Page editing links ── -->
+    <h2 class="admin-section-heading">Edit Pages</h2>
     <p>Select a page below to edit its content directly. Once on the page, turn on "Edit Mode" from the toolbar to start editing.</p>
 
     <div class="admin-page-links">

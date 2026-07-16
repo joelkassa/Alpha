@@ -24,6 +24,8 @@ const adminApiRoutes = require('./routes/adminApiRoutes');
 const adminListRoutes = require('./routes/adminListRoutes');
 const uploadRoutes = require('./routes/uploadRoutes');
 
+const { doubleCsrfProtection, generateCsrfToken } = require('./middleware/csrf');
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -49,6 +51,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(language);
 app.use(sessionMiddleware);
+app.use(doubleCsrfProtection);
+
+// Make the token available to every template
+app.use((req, res, next) => {
+  res.locals.csrfToken = generateCsrfToken(req, res);
+  next();
+});
 
 app.use(adminLocals);
 

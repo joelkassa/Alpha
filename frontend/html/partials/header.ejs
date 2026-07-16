@@ -1,19 +1,21 @@
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
 <header class="site-header" id="site-header">
   <div class="header-inner">
     <a href="/" class="logo">Alpha School</a>
 
-    <nav class="main-nav">
-      <a href="/" class="<%= activePage === 'home' ? 'active' : '' %>"><%= lang === 'am' ? 'መነሻ' : 'Home' %></a>
-      <a href="/about" class="<%= activePage === 'about' ? 'active' : '' %>"><%= lang === 'am' ? 'ስለ እኛ' : 'About Us' %></a>
-      <a href="/programs" class="<%= activePage === 'programs' ? 'active' : '' %>"><%= lang === 'am' ? 'ፕሮግራሞች' : 'Programs' %></a>
-      <a href="/contact" class="<%= activePage === 'contact' ? 'active' : '' %>"><%= lang === 'am' ? 'አግኙን' : 'Contact' %></a>
-      <a href="/donate" class="nav-donate <%= activePage === 'donate' ? 'active' : '' %>"><%= lang === 'am' ? 'ለግሱ' : 'Donate' %></a>
+    <nav class="main-nav" aria-label="Main navigation">
+      <a href="/" class="<%= activePage === 'home' ? 'active' : '' %>" <%= activePage === 'home' ? 'aria-current="page"' : '' %>><%= lang === 'am' ? 'መነሻ' : 'Home' %></a>
+      <a href="/about" class="<%= activePage === 'about' ? 'active' : '' %>" <%= activePage === 'about' ? 'aria-current="page"' : '' %>><%= lang === 'am' ? 'ስለ እኛ' : 'About Us' %></a>
+      <a href="/programs" class="<%= activePage === 'programs' ? 'active' : '' %>" <%= activePage === 'programs' ? 'aria-current="page"' : '' %>><%= lang === 'am' ? 'ፕሮግራሞች' : 'Programs' %></a>
+      <a href="/contact" class="<%= activePage === 'contact' ? 'active' : '' %>" <%= activePage === 'contact' ? 'aria-current="page"' : '' %>><%= lang === 'am' ? 'አግኙን' : 'Contact' %></a>
+      <a href="/donate" class="nav-donate <%= activePage === 'donate' ? 'active' : '' %>" <%= activePage === 'donate' ? 'aria-current="page"' : '' %>><%= lang === 'am' ? 'ለግሱ' : 'Donate' %></a>
     </nav>
 
-    <div class="lang-switch">
-      <a href="?lang=en" class="<%= lang === 'en' ? 'active' : '' %>">EN</a>
-      <span>/</span>
-      <a href="?lang=am" class="<%= lang === 'am' ? 'active' : '' %>">አማ</a>
+    <div class="lang-switch" role="group" aria-label="Language selection">
+      <a href="?lang=en" class="<%= lang === 'en' ? 'active' : '' %>" <%= lang === 'en' ? 'aria-current="true"' : '' %>>EN</a>
+      <span aria-hidden="true">/</span>
+      <a href="?lang=am" class="<%= lang === 'am' ? 'active' : '' %>" <%= lang === 'am' ? 'aria-current="true"' : '' %>>አማ</a>
     </div>
   </div>
 </header>

@@ -83,11 +83,36 @@
     }
   });
 
-  resetBtn.addEventListener('click', async function () {
-    const confirmText = prompt('This will erase all edits and restore the original default content. Type RESET to confirm:');
-    if (confirmText !== 'RESET') return;
+  // ── Reset to Default (custom modal, not native prompt()) ──
+  const resetModalOverlay = document.getElementById('resetModalOverlay');
+  const resetConfirmInput = document.getElementById('resetConfirmInput');
+  const resetCancelBtn = document.getElementById('resetCancelBtn');
+  const resetConfirmBtn = document.getElementById('resetConfirmBtn');
 
+  resetBtn.addEventListener('click', function () {
+    resetConfirmInput.value = '';
+    resetModalOverlay.hidden = false;
+    resetConfirmInput.focus();
+  });
+
+  resetCancelBtn.addEventListener('click', function () {
+    resetModalOverlay.hidden = true;
+  });
+
+  resetModalOverlay.addEventListener('click', function (e) {
+    if (e.target === resetModalOverlay) resetModalOverlay.hidden = true;
+  });
+
+  resetConfirmBtn.addEventListener('click', async function () {
+    const confirmText = resetConfirmInput.value;
+    if (confirmText !== 'RESET') {
+      resetConfirmInput.focus();
+      return;
+    }
+
+    resetModalOverlay.hidden = true;
     statusEl.textContent = 'Resetting...';
+
     try {
       const res = await fetch('/admin/api/reset', {
         method: 'POST',

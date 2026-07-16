@@ -8,8 +8,11 @@
   <link rel="stylesheet" href="/css/variables.css">
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/admin.css">
+  <link rel="stylesheet" href="/css/preloader.css">
 </head>
 <body class="<%= lang === 'am' ? 'lang-am' : '' %>">
+
+  <%- include('partials/preloader') %>
 
   <%- include('partials/header') %>
 
@@ -17,7 +20,7 @@
     <%- include('partials/admin-toolbar') %>
   <% } %>
 
-  <main>
+  <main id="main-content">
     <section class="hero">
       <div class="hero-inner">
         <h1 class="hero-title" data-editable-key="home_hero_title" data-editable-lang="<%= lang %>"><%= content.home_hero_title %></h1>
@@ -98,6 +101,7 @@
   <%- include('partials/footer') %>
 
   <script src="/js/main.js"></script>
+  <script src="/js/preloader.js"></script>
   <% if (isAdmin) { %>
      <script src="/js/admin-state.js"></script>
     <script src="/js/admin-edit.js"></script>

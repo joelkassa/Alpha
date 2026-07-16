@@ -8,15 +8,18 @@
   <link rel="stylesheet" href="/css/variables.css">
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/admin.css">
+  <link rel="stylesheet" href="/css/preloader.css">
 </head>
 <body class="<%= lang === 'am' ? 'lang-am' : '' %>">
+
+  <%- include('partials/preloader') %>
 
   <%- include('partials/header') %>
   <% if (isAdmin) { %>
   <%- include('partials/admin-toolbar') %>
   <% } %>
 
-  <main>
+  <main id="main-content">
     <section class="page-hero">
       <div class="page-hero-inner">
         <h1><%= lang === 'am' ? 'አግኙን' : 'Contact Us' %></h1>
@@ -27,14 +30,17 @@
       <div class="section-inner contact-layout">
 
         <div class="contact-form-col">
-          <% if (success) { %>
-            <p class="form-success"><%= lang === 'am' ? 'መልዕክትዎ ተልኳል። እናመሰግናለን!' : 'Your message has been sent. Thank you!' %></p>
-          <% } %>
-          <% if (error) { %>
-            <p class="form-error"><%= error %></p>
-          <% } %>
+          <div role="status" aria-live="polite">
+            <% if (success) { %>
+              <p class="form-success"><%= lang === 'am' ? 'መልዕክትዎ ተልኳል። እናመሰግናለን!' : 'Your message has been sent. Thank you!' %></p>
+            <% } %>
+            <% if (error) { %>
+              <p class="form-error"><%= error %></p>
+            <% } %>
+          </div>
 
           <form method="POST" action="/contact" class="contact-form">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
             <label for="name"><%= lang === 'am' ? 'ስም' : 'Name' %></label>
             <input type="text" id="name" name="name" value="<%= formData.name || '' %>" required>
 
@@ -70,6 +76,7 @@
   <%- include('partials/footer') %>
 
   <script src="/js/main.js"></script>
+  <script src="/js/preloader.js"></script>
   <% if (isAdmin) { %>
   <script src="/js/admin-edit.js"></script>
 <% } %>

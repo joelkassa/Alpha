@@ -8,8 +8,11 @@
   <link rel="stylesheet" href="/css/variables.css">
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/admin.css">
+  <link rel="stylesheet" href="/css/preloader.css">
 </head>
 <body class="<%= lang === 'am' ? 'lang-am' : '' %>">
+
+  <%- include('partials/preloader') %>
 
   <%- include('partials/header') %>
 
@@ -17,7 +20,7 @@
     <%- include('partials/admin-toolbar') %>
   <% } %>
 
-  <main>
+  <main id="main-content">
     <section class="page-hero">
       <div class="page-hero-inner">
         <h1 data-editable-key="donate_hero_title" data-editable-lang="<%= lang %>"><%= content.donate_hero_title %></h1>
@@ -28,11 +31,14 @@
     <section class="about-section">
       <div class="section-inner donate-layout">
 
-        <% if (error) { %>
-          <p class="form-error"><%= error %></p>
-        <% } %>
+        <div role="status" aria-live="polite">
+          <% if (error) { %>
+            <p class="form-error"><%= error %></p>
+          <% } %>
+        </div>
 
         <form method="POST" action="/donate/initiate" class="donate-form" id="donateForm">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
 
           <label class="donate-label"><%= lang === 'am' ? 'መጠን ይምረጡ' : 'Choose an amount' %></label>
           <div class="amount-grid">
@@ -67,6 +73,7 @@
   <%- include('partials/footer') %>
 
   <script src="/js/main.js"></script>
+  <script src="/js/preloader.js"></script>
   <script src="/js/donate.js"></script>
   <% if (isAdmin) { %>
     <script src="/js/admin-state.js"></script>

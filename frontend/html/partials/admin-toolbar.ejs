@@ -4,5 +4,18 @@
   <button id="saveChangesBtn" type="button" disabled>Save Changes</button>
   <button id="undoBtn" type="button">Undo</button>
   <button id="resetBtn" type="button">Reset to Default</button>
-  <span id="adminSaveStatus"></span>
+  <span id="adminSaveStatus" role="status" aria-live="polite"></span>
+</div>
+
+<div id="resetModalOverlay" class="admin-modal-overlay" hidden>
+  <div class="admin-modal-box">
+    <h3>⚠ Reset to Default</h3>
+    <p>This will erase all edits and restore the original default content. This cannot be undone.</p>
+    <p>Type <strong>RESET</strong> to confirm:</p>
+    <input type="text" id="resetConfirmInput" autocomplete="off">
+    <div class="admin-modal-actions">
+      <button type="button" id="resetCancelBtn" class="admin-modal-cancel">Cancel</button>
+      <button type="button" id="resetConfirmBtn" class="admin-modal-confirm">Reset Website</button>
+    </div>
+  </div>
 </div>
