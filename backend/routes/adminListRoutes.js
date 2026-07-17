@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const requireAuth = require('../middleware/requireAuth');
 const createListController = require('../controllers/adminListController');
+const createReorderHandler = require('../controllers/adminReorderController');
 
 const statsController = createListController({
   table: 'stats',
@@ -28,6 +29,11 @@ router.use(requireAuth);
 
 router.post('/stats', statsController.create);
 router.patch('/stats/:id', statsController.update);
+router.post('/stats/reorder', createReorderHandler('stats'));
+router.post('/programs/reorder', createReorderHandler('programs'));
+router.post('/staff/reorder', createReorderHandler('staff'));
+router.post('/donor-logos/reorder', createReorderHandler('donor_logos'));
+router.post('/gallery/reorder', createReorderHandler('gallery_images'));
 router.delete('/stats/:id', statsController.remove);
 
 router.post('/programs', programsController.create);

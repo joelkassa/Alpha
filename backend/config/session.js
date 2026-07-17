@@ -10,7 +10,7 @@ module.exports = session({
   }),
   secret: process.env.SESSION_SECRET,
   resave: false,
-  saveUninitialized: false,
+  saveUninitialized: true,
   cookie: {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',

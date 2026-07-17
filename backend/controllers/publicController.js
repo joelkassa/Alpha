@@ -105,11 +105,12 @@ exports.getPrograms = async (req, res, next) => {
     }));
 
     const galleryResult = await db.query(
-      `SELECT id, image_url, caption_en, caption_am
+      `SELECT id, program_id, image_url, caption_en, caption_am
        FROM gallery_images ORDER BY sort_order ASC`
     );
     const gallery = galleryResult.rows.map((row) => ({
       id: row.id,
+      program_id: row.program_id,
       image_url: row.image_url,
       caption: lang === 'am' ? row.caption_am : row.caption_en,
     }));

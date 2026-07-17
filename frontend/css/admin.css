@@ -377,3 +377,34 @@ body.admin-edit-mode .admin-image-upload-label {
   background: #f8d7da;
   color: #842029;
 }
+
+/* ── Drag reordering ── */
+body.admin-edit-mode [data-list-table] {
+  cursor: grab;
+}
+body.admin-edit-mode [data-list-table]:active {
+  cursor: grabbing;
+}
+[data-list-table].dragging {
+  opacity: 0.4;
+}
+.list-drag-hint {
+  font-size: 0.8rem;
+  color: var(--gray-text);
+  font-style: italic;
+  margin-bottom: 10px;
+}
+
+/* ── Gallery program-link dropdown ── */
+.list-program-select {
+  display: none;
+  width: 100%;
+  margin: 8px 0;
+  padding: 6px 8px;
+  border: 1px solid var(--gray-mid);
+  border-radius: 4px;
+  font-size: 0.82rem;
+}
+body.admin-edit-mode .list-program-select {
+  display: block;
+}

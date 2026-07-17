@@ -86,16 +86,16 @@ app.use('/admin/api/upload', uploadRoutes);
 
 // --- 404 handler ---
 app.use((req, res) => {
-  res.status(404).send('Page not found');
+  res.status(404).render('404', { title: 'Page Not Found' });
 });
 
 // --- Error handler ---
 app.use((err, req, res, next) => {
   console.error(err.stack);
   if (err.code === 'EBADCSRFTOKEN') {
-    return res.status(403).send('Invalid or expired form submission. Please go back and try again.');
+    return res.status(403).render('500', { title: 'Something Went Wrong' });
   }
-  res.status(500).send('Something went wrong');
+  res.status(500).render('500', { title: 'Something Went Wrong' });
 });
 
 app.listen(PORT, () => {

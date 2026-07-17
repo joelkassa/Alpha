@@ -16,6 +16,7 @@
       el.contentEditable = on;
       el.classList.toggle('admin-editable-active', on);
     });
+    document.dispatchEvent(new CustomEvent('adminEditModeChanged', { detail: { on: on } }));
   }
 
   toggleBtn.addEventListener('click', function () {
@@ -44,7 +45,7 @@
     try {
       for (const change of entries) {
         if (change.type === 'content') {
-          await fetch('/admin/api/content-blocks/' + encodeURIComponent(change.key), {
+          await window.adminFetch('/admin/api/content-blocks/' + encodeURIComponent(change.key), {
             method: 'PATCH',
             headers: {
               'Content-Type': 'application/json',
@@ -53,7 +54,7 @@
             body: JSON.stringify({ value: change.value, lang: change.lang }),
           });
         } else if (change.type === 'list') {
-          await fetch('/admin/api/lists/' + change.table + '/' + change.recordId, {
+          await window.adminFetch('/admin/api/lists/' + change.table + '/' + change.recordId, {
             method: 'PATCH',
             headers: {
               'Content-Type': 'application/json',
@@ -68,14 +69,16 @@
       statusEl.textContent = 'All changes saved';
       setTimeout(function () { window.location.reload(); }, 800);
     } catch (err) {
-      statusEl.textContent = 'Error saving changes';
+      if (err.message !== 'Session expired') {
+        statusEl.textContent = 'Error saving changes';
+      }
     }
   });
 
   undoBtn.addEventListener('click', async function () {
     statusEl.textContent = 'Undoing...';
     try {
-      const res = await fetch('/admin/api/undo', {
+      const res = await window.adminFetch('/admin/api/undo', {
         method: 'POST',
         headers: { 'X-CSRF-Token': window.getCsrfToken() },
       });
@@ -87,7 +90,9 @@
         statusEl.textContent = data.error || 'Nothing to undo';
       }
     } catch (err) {
-      statusEl.textContent = 'Error undoing';
+      if (err.message !== 'Session expired') {
+        statusEl.textContent = 'Error undoing';
+      }
     }
   });
 
@@ -122,7 +127,7 @@
     statusEl.textContent = 'Resetting...';
 
     try {
-      const res = await fetch('/admin/api/reset', {
+      const res = await window.adminFetch('/admin/api/reset', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -139,7 +144,9 @@
         statusEl.textContent = data.error || 'Reset failed';
       }
     } catch (err) {
-      statusEl.textContent = 'Error resetting';
+      if (err.message !== 'Session expired') {
+        statusEl.textContent = 'Error resetting';
+      }
     }
   });
 })();
