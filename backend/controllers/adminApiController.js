@@ -40,7 +40,7 @@ exports.patchContentBlock = async (req, res) => {
   }
 };
 
-// Undo the most recent change, regardless of which table it touched
+// Undo the most recent change, regardless of which table or action type it was
 exports.postUndo = async (req, res) => {
   try {
     const lastChange = await db.query(
@@ -61,6 +61,10 @@ exports.postUndo = async (req, res) => {
       const values = columns.map((c) => row[c]);
       values.push(row.id);
       await db.query(`UPDATE ${table_name} SET ${setClauses} WHERE id = $${columns.length + 1}`, values);
+    } else if (action === 'reorder') {
+      for (const row of previous_data) {
+        await db.query(`UPDATE ${table_name} SET sort_order = $1 WHERE id = $2`, [row.sort_order, row.id]);
+      }
     } else if (action === 'create') {
       await db.query(`DELETE FROM ${table_name} WHERE id = $1`, [new_data.id]);
     } else if (action === 'delete') {
